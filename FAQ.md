@@ -409,6 +409,59 @@ others, so other snapshots are not affected. However, the data of identical file
 not stored redundantly by multiple snapshots, so removing a snapshot will only
 recover the space used by files that are unique to that snapshot.
 
+## How can I exclude cache folders to improve backup speed and reduce storage?
+
+**Why exclude cache folders?**
+
+Cache folders typically contain temporary files that are not necessary for backups. 
+Excluding them can significantly improve backup speed and reduce storage usage.
+
+**How to exclude cache folders:**
+
+1. Open Back in Time.
+2. Go to the **Exclude Patterns** settings:
+   - Click the "Exclude" tab in the configuration window.
+   - Click the **Add** button to create a new exclude pattern.
+
+3. Add the following patterns to exclude common cache directories:
+   ```plaintext
+   .var/app/**/[Cc]ache/
+   .var/app/**/media_cache/
+   .mozilla/firefox/**/cache/
+   .config/BraveSoftware/Brave-Browser/Default/Service Worker/CacheStorage/
+   ```
+
+**Explanation**:
+
+- `/**/` matches any directory structure leading to the specified folder.
+- `[Cc]ache` matches folder names with either uppercase or lowercase "Cache."
+
+4. Decide whether to include or exclude the folder itself:
+   - To exclude only the folder’s content, use `/*` at the end of the pattern:
+     ```plaintext
+     .var/app/**/[Cc]ache/*
+     ```
+   - To exclude the folder and its contents, omit the `/*`:
+     ```plaintext
+     .var/app/**/[Cc]ache/
+     ```
+
+**Tips for better results:**
+
+- **Check Backup Logs**:  
+  After running a backup, review the logs to identify additional folders that may 
+  slow down the process. Example log entries for cache files:
+  ```plaintext
+  [E] Skipping file /path/to/cache/file: Too many small files.
+  ```
+
+- **Customize Patterns**:  
+  Adjust the patterns to suit your specific applications. For example, modify paths 
+  for browsers or other software you use.
+
+- **Test Exclude Patterns**:  
+  Test your backup after adding patterns to ensure they work as intended.
+
 
 # Restore
 
